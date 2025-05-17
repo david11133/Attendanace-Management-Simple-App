@@ -14,3 +14,4 @@ D:\4th Year\2nd Term\Visual Programming\Visual Programing\Project\Attendance Man
 D:\4th Year\2nd Term\Visual Programming\Visual Programing\Project\Attendance Management\AttendanaceManagement\obj\Debug\net7.0-windows\AttendanaceManagement.pdb
 D:\4th Year\2nd Term\Visual Programming\Visual Programing\Project\Attendance Management\AttendanaceManagement\obj\Debug\net7.0-windows\AttendanaceManagement.genruntimeconfig.cache
 D:\4th Year\2nd Term\Visual Programming\Visual Programing\Project\Attendance Management\AttendanaceManagement\obj\Debug\net7.0-windows\ref\AttendanaceManagement.dll
+D:\4th Year\2nd Term\Visual Programming\Visual Programing\Project\Attendance Management\AttendanaceManagement\obj\Debug\net7.0-windows\AttendanaceManagement.LoginForm.resources

@@ -18,6 +18,10 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             panelLeft = new Panel();
+            btnLogout = new Button();
+            femaleRadioButton = new RadioButton();
+            maleRadioButton = new RadioButton();
+            label1 = new Label();
             labelSearchStatus = new Label();
             btnSearch = new Button();
             txtSearch = new TextBox();
@@ -26,8 +30,6 @@
             labelHeader = new Label();
             labelName = new Label();
             txtName = new TextBox();
-            labelClass = new Label();
-            txtClass = new TextBox();
             btnAddStudent = new Button();
             panelRight = new Panel();
             labelAttendance = new Label();
@@ -37,6 +39,7 @@
             dataGridView1 = new DataGridView();
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
+            newAttendanceFileToolStripMenuItem = new ToolStripMenuItem();
             exitToolStripMenuItem = new ToolStripMenuItem();
             colorsToolStripMenuItem = new ToolStripMenuItem();
             backgroundColorToolStripMenuItem = new ToolStripMenuItem();
@@ -44,6 +47,10 @@
             greenToolStripMenuItem = new ToolStripMenuItem();
             blueToolStripMenuItem = new ToolStripMenuItem();
             timerAutoSave = new System.Windows.Forms.Timer(components);
+            textColorToolStripMenuItem = new ToolStripMenuItem();
+            darkBlueTextToolStripMenuItem = new ToolStripMenuItem();
+            greenTextToolStripMenuItem = new ToolStripMenuItem();
+            blackTextToolStripMenuItem = new ToolStripMenuItem();
             panelLeft.SuspendLayout();
             panelRight.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
@@ -53,6 +60,10 @@
             // panelLeft
             // 
             panelLeft.BackColor = Color.WhiteSmoke;
+            panelLeft.Controls.Add(btnLogout);
+            panelLeft.Controls.Add(femaleRadioButton);
+            panelLeft.Controls.Add(maleRadioButton);
+            panelLeft.Controls.Add(label1);
             panelLeft.Controls.Add(labelSearchStatus);
             panelLeft.Controls.Add(btnSearch);
             panelLeft.Controls.Add(txtSearch);
@@ -61,8 +72,6 @@
             panelLeft.Controls.Add(labelHeader);
             panelLeft.Controls.Add(labelName);
             panelLeft.Controls.Add(txtName);
-            panelLeft.Controls.Add(labelClass);
-            panelLeft.Controls.Add(txtClass);
             panelLeft.Controls.Add(btnAddStudent);
             panelLeft.Dock = DockStyle.Left;
             panelLeft.Location = new Point(0, 0);
@@ -71,11 +80,62 @@
             panelLeft.Size = new Size(329, 650);
             panelLeft.TabIndex = 1;
             // 
+            // btnLogout
+            // 
+            btnLogout.BackColor = Color.FromArgb(220, 53, 69);
+            btnLogout.Cursor = Cursors.Hand;
+            btnLogout.FlatAppearance.BorderSize = 0;
+            btnLogout.FlatStyle = FlatStyle.Flat;
+            btnLogout.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            btnLogout.ForeColor = Color.White;
+            btnLogout.ImageAlign = ContentAlignment.MiddleLeft;
+            btnLogout.Location = new Point(20, 538);
+            btnLogout.Name = "btnLogout";
+            btnLogout.Padding = new Padding(10, 0, 10, 0);
+            btnLogout.Size = new Size(142, 45);
+            btnLogout.TabIndex = 14;
+            btnLogout.Text = "🔒  Logout";
+            btnLogout.TextAlign = ContentAlignment.MiddleRight;
+            btnLogout.UseVisualStyleBackColor = false;
+            btnLogout.Click += btnLogout_Click;
+            // 
+            // femaleRadioButton
+            // 
+            femaleRadioButton.AutoSize = true;
+            femaleRadioButton.Location = new Point(128, 219);
+            femaleRadioButton.Name = "femaleRadioButton";
+            femaleRadioButton.Size = new Size(93, 29);
+            femaleRadioButton.TabIndex = 13;
+            femaleRadioButton.TabStop = true;
+            femaleRadioButton.Text = "Female";
+            femaleRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // maleRadioButton
+            // 
+            maleRadioButton.AutoSize = true;
+            maleRadioButton.Location = new Point(23, 219);
+            maleRadioButton.Name = "maleRadioButton";
+            maleRadioButton.Size = new Size(75, 29);
+            maleRadioButton.TabIndex = 12;
+            maleRadioButton.TabStop = true;
+            maleRadioButton.Text = "Male";
+            maleRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.Location = new Point(20, 178);
+            label1.Name = "label1";
+            label1.Size = new Size(80, 28);
+            label1.TabIndex = 11;
+            label1.Text = "Gender:";
+            // 
             // labelSearchStatus
             // 
             labelSearchStatus.AutoSize = true;
-            labelSearchStatus.ForeColor = Color.Red;
-            labelSearchStatus.Location = new Point(20, 488);
+            labelSearchStatus.ForeColor = SystemColors.HotTrack;
+            labelSearchStatus.Location = new Point(20, 490);
             labelSearchStatus.Name = "labelSearchStatus";
             labelSearchStatus.Size = new Size(0, 25);
             labelSearchStatus.TabIndex = 10;
@@ -86,7 +146,7 @@
             btnSearch.FlatStyle = FlatStyle.Flat;
             btnSearch.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
             btnSearch.ForeColor = Color.White;
-            btnSearch.Location = new Point(176, 434);
+            btnSearch.Location = new Point(176, 436);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(124, 40);
             btnSearch.TabIndex = 9;
@@ -96,7 +156,7 @@
             // 
             // txtSearch
             // 
-            txtSearch.Location = new Point(20, 440);
+            txtSearch.Location = new Point(20, 442);
             txtSearch.Name = "txtSearch";
             txtSearch.Size = new Size(150, 31);
             txtSearch.TabIndex = 8;
@@ -107,7 +167,7 @@
             btnDeleteStudent.FlatStyle = FlatStyle.Flat;
             btnDeleteStudent.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
             btnDeleteStudent.ForeColor = Color.White;
-            btnDeleteStudent.Location = new Point(20, 342);
+            btnDeleteStudent.Location = new Point(20, 366);
             btnDeleteStudent.Name = "btnDeleteStudent";
             btnDeleteStudent.Size = new Size(280, 40);
             btnDeleteStudent.TabIndex = 7;
@@ -153,31 +213,13 @@
             txtName.Size = new Size(280, 34);
             txtName.TabIndex = 2;
             // 
-            // labelClass
-            // 
-            labelClass.AutoSize = true;
-            labelClass.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            labelClass.Location = new Point(20, 178);
-            labelClass.Name = "labelClass";
-            labelClass.Size = new Size(59, 28);
-            labelClass.TabIndex = 3;
-            labelClass.Text = "Class:";
-            // 
-            // txtClass
-            // 
-            txtClass.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            txtClass.Location = new Point(20, 210);
-            txtClass.Name = "txtClass";
-            txtClass.Size = new Size(280, 34);
-            txtClass.TabIndex = 4;
-            // 
             // btnAddStudent
             // 
             btnAddStudent.BackColor = Color.FromArgb(0, 120, 215);
             btnAddStudent.FlatStyle = FlatStyle.Flat;
             btnAddStudent.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
             btnAddStudent.ForeColor = Color.White;
-            btnAddStudent.Location = new Point(20, 276);
+            btnAddStudent.Location = new Point(20, 300);
             btnAddStudent.Name = "btnAddStudent";
             btnAddStudent.Size = new Size(280, 40);
             btnAddStudent.TabIndex = 5;
@@ -275,21 +317,28 @@
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exitToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newAttendanceFileToolStripMenuItem, exitToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(54, 29);
             fileToolStripMenuItem.Text = "File";
             // 
+            // newAttendanceFileToolStripMenuItem
+            // 
+            newAttendanceFileToolStripMenuItem.Name = "newAttendanceFileToolStripMenuItem";
+            newAttendanceFileToolStripMenuItem.Size = new Size(275, 34);
+            newAttendanceFileToolStripMenuItem.Text = "New Attendance File";
+            newAttendanceFileToolStripMenuItem.Click += newAttendanceFileToolStripMenuItem_Click;
+            // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(141, 34);
+            exitToolStripMenuItem.Size = new Size(275, 34);
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click_1;
             // 
             // colorsToolStripMenuItem
             // 
-            colorsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { backgroundColorToolStripMenuItem });
+            colorsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { backgroundColorToolStripMenuItem, textColorToolStripMenuItem });
             colorsToolStripMenuItem.Name = "colorsToolStripMenuItem";
             colorsToolStripMenuItem.Size = new Size(79, 29);
             colorsToolStripMenuItem.Text = "Colors";
@@ -298,7 +347,7 @@
             // 
             backgroundColorToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { redToolStripMenuItem, greenToolStripMenuItem, blueToolStripMenuItem });
             backgroundColorToolStripMenuItem.Name = "backgroundColorToolStripMenuItem";
-            backgroundColorToolStripMenuItem.Size = new Size(257, 34);
+            backgroundColorToolStripMenuItem.Size = new Size(270, 34);
             backgroundColorToolStripMenuItem.Text = "Background Color";
             // 
             // redToolStripMenuItem
@@ -327,6 +376,34 @@
             timerAutoSave.Interval = 1000;
             timerAutoSave.Tick += timerAutoSave_Tick;
             // 
+            // textColorToolStripMenuItem
+            // 
+            textColorToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { darkBlueTextToolStripMenuItem, greenTextToolStripMenuItem, blackTextToolStripMenuItem });
+            textColorToolStripMenuItem.Name = "textColorToolStripMenuItem";
+            textColorToolStripMenuItem.Size = new Size(270, 34);
+            textColorToolStripMenuItem.Text = "Text Color";
+            // 
+            // darkBlueTextToolStripMenuItem
+            // 
+            darkBlueTextToolStripMenuItem.Name = "darkBlueTextToolStripMenuItem";
+            darkBlueTextToolStripMenuItem.Size = new Size(270, 34);
+            darkBlueTextToolStripMenuItem.Text = "Dark Blue";
+            darkBlueTextToolStripMenuItem.Click += darkBlueTextToolStripMenuItem_Click;
+            // 
+            // greenTextToolStripMenuItem
+            // 
+            greenTextToolStripMenuItem.Name = "greenTextToolStripMenuItem";
+            greenTextToolStripMenuItem.Size = new Size(270, 34);
+            greenTextToolStripMenuItem.Text = "Green";
+            greenTextToolStripMenuItem.Click += greenTextToolStripMenuItem_Click;
+            // 
+            // blackTextToolStripMenuItem
+            // 
+            blackTextToolStripMenuItem.Name = "blackTextToolStripMenuItem";
+            blackTextToolStripMenuItem.Size = new Size(270, 34);
+            blackTextToolStripMenuItem.Text = "Black";
+            blackTextToolStripMenuItem.Click += blackTextToolStripMenuItem_Click;
+            // 
             // Form1
             // 
             ClientSize = new Size(1200, 650);
@@ -353,9 +430,7 @@
         private Panel panelRight;
         private Label labelHeader;
         private Label labelName;
-        private Label labelClass;
         private TextBox txtName;
-        private TextBox txtClass;
         private Button btnAddStudent;
 
         private Label labelAttendance;
@@ -377,5 +452,14 @@
         private Button btnSearch;
         private TextBox txtSearch;
         private Label labelSearchStatus;
+        private RadioButton femaleRadioButton;
+        private RadioButton maleRadioButton;
+        private Label label1;
+        private ToolStripMenuItem newAttendanceFileToolStripMenuItem;
+        private Button btnLogout;
+        private ToolStripMenuItem textColorToolStripMenuItem;
+        private ToolStripMenuItem darkBlueTextToolStripMenuItem;
+        private ToolStripMenuItem greenTextToolStripMenuItem;
+        private ToolStripMenuItem blackTextToolStripMenuItem;
     }
 }

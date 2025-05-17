@@ -21,6 +21,9 @@ namespace AttendanaceManagement
         private void Form1_Load(object sender, EventArgs e)
         {
             labelAttendance.Text = $"Take Attendance (Today's Date: {DateTime.Today:yyyy-MM-dd})";
+            txtSearch.TextChanged += txtSearch_TextChanged;
+            dataGridView1.CellValueChanged += dataGridView1_CellValueChanged;
+            dataGridView1.CurrentCellDirtyStateChanged += dataGridView1_CurrentCellDirtyStateChanged;
         }
 
         private void SetupDataGridView()
@@ -58,7 +61,7 @@ namespace AttendanaceManagement
         private DataTable LoadCsvToDataTable(string[] lines)
         {
             var dt = new DataTable();
-            var headers = lines[0].Split(',');
+            var headers = lines[0].Split(',').Where(h => h != "Class").ToArray();
 
             var booleanColumns = headers
                 .Where(h => DateTime.TryParseExact(h, "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out _))
@@ -71,10 +74,12 @@ namespace AttendanaceManagement
             {
                 var data = lines[i].Split(',');
                 var row = dt.NewRow();
+                int columnIndex = 0;
                 for (int j = 0; j < headers.Length; j++)
                 {
-                    var value = data[j];
-                    row[headers[j]] = booleanColumns.Contains(headers[j]) ? bool.TryParse(value, out bool b) && b : value;
+                    var header = headers[j];
+                    var value = data[columnIndex++];
+                    row[header] = booleanColumns.Contains(header) ? bool.TryParse(value, out bool b) && b : value;
                 }
                 dt.Rows.Add(row);
             }
@@ -86,7 +91,7 @@ namespace AttendanaceManagement
         {
             if (dt.Columns.Contains(todayColumn)) return;
 
-            int insertIndex = dt.Columns.Contains("Class") ? dt.Columns["Class"].Ordinal + 1 : dt.Columns.Count;
+            int insertIndex = dt.Columns.Contains("Gender") ? dt.Columns["Gender"].Ordinal + 1 : dt.Columns.Count;
             dt.Columns.Add(todayColumn, typeof(bool));
             dt.Columns[todayColumn].SetOrdinal(insertIndex);
 
@@ -130,12 +135,20 @@ namespace AttendanaceManagement
 
             var newRow = dt.NewRow();
             newRow["Name"] = txtName.Text;
-            newRow["Class"] = txtClass.Text;
+
+            if (maleRadioButton.Checked)
+                newRow["Gender"] = "Male";
+            else if (femaleRadioButton.Checked)
+                newRow["Gender"] = "Female";
+            else
+                newRow["Gender"] = "Unspecified";
+
             newRow[todayColumn] = false;
             dt.Rows.Add(newRow);
 
             txtName.Clear();
-            txtClass.Clear();
+            maleRadioButton.Checked = false;
+            femaleRadioButton.Checked = false;
 
             originalDataTable = dt.Copy();
             UpdateStudentCountLabel();
@@ -146,7 +159,7 @@ namespace AttendanaceManagement
         {
             var dt = new DataTable();
             dt.Columns.Add("Name");
-            dt.Columns.Add("Class");
+            dt.Columns.Add("Gender");
             dt.Columns.Add(todayColumn, typeof(bool));
 
             dataGridView1.DataSource = dt;
@@ -163,6 +176,26 @@ namespace AttendanaceManagement
             labelAutoSave.Text = $"Auto-saving in: {autoSaveCountdown}s";
             timerAutoSave.Start();
         }
+
+        private void dataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            // Commit checkbox value immediately when edited
+            if (dataGridView1.IsCurrentCellDirty)
+                dataGridView1.CommitEdit(DataGridViewDataErrorContexts.Commit);
+        }
+
+        private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                var columnName = dataGridView1.Columns[e.ColumnIndex].Name;
+                if (columnName == todayColumn)
+                {
+                    TriggerAutoSave(); // Save when today's attendance checkbox is changed
+                }
+            }
+        }
+
 
         private void btnSaveCSV_Click(object sender, EventArgs e)
         {
@@ -249,6 +282,14 @@ namespace AttendanaceManagement
             TriggerAutoSave();
         }
 
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtSearch.Text))
+            {
+                ResetSearchResults();
+            }
+        }
+
         private void btnSearch_Click(object sender, EventArgs e)
         {
             if (originalDataTable == null)
@@ -265,7 +306,7 @@ namespace AttendanaceManagement
                 return;
             }
 
-            string filter = $"Name LIKE '%{searchTerm}%' OR Class LIKE '%{searchTerm}%'";
+            string filter = $"Name LIKE '%{searchTerm}%' OR Gender LIKE '%{searchTerm}%'";
             var matches = originalDataTable.Select(filter);
 
             if (matches.Length == 0)
@@ -298,6 +339,62 @@ namespace AttendanaceManagement
         {
             foreach (DataGridViewRow row in dataGridView1.Rows)
                 row.DefaultCellStyle.BackColor = Color.LightGreen;
+        }
+
+        private void newAttendanceFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var confirm = MessageBox.Show("Are you sure you want to start a new attendance file? All unsaved data will be lost.",
+                                   "Confirm New File", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (confirm != DialogResult.Yes) return;
+
+            dataGridView1.DataSource = null;
+            originalDataTable = null;
+            currentCsvFilePath = null;
+            isCsvFileLoaded = false;
+            isDataModified = false;
+
+            labelStudentCount.Text = "Number of Students: 0";
+            labelAutoSave.Text = "Auto-save not started.";
+            labelSearchStatus.Text = "";
+            txtSearch.Clear();
+
+            txtName.Clear();
+            maleRadioButton.Checked = false;
+            femaleRadioButton.Checked = false;
+        }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            var confirm = MessageBox.Show("Are you sure you want to logout?", "Confirm Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirm == DialogResult.Yes)
+            {
+                this.Hide();
+                var login = new LoginForm();
+                login.FormClosed += (s, args) => this.Close();
+                login.Show();
+            }
+        }
+
+        private void SetDataGridTextColor(Color color)
+        {
+            dataGridView1.DefaultCellStyle.ForeColor = color;
+            dataGridView1.ColumnHeadersDefaultCellStyle.ForeColor = color;
+        }
+
+
+        private void darkBlueTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetDataGridTextColor(Color.DarkBlue);
+        }
+
+        private void greenTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetDataGridTextColor(Color.DarkGreen);
+        }
+
+        private void blackTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetDataGridTextColor(Color.Black);
         }
 
         private void exitToolStripMenuItem_Click_1(object sender, EventArgs e) => Application.Exit();
